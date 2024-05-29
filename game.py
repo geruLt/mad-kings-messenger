@@ -12,7 +12,7 @@ class Game:
         self.current_state = None
         pygame.mixer.init()
         self.soundtrack = pygame.mixer.Sound('assets/soundtrack.ogg')
-        # self.soundtrack.play(-1)
+        self.soundtrack.play(-1)
 
     def register_state(self, state_name, state):
         self.states[state_name] = state

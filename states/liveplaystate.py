@@ -163,8 +163,8 @@ class LivePlayState(GameState):
         self.mood_change = 0
 
         # Call the engine
-        #output = self.lord_engine.call(self.user_input)
-        output = self.lord_engine.call_debug()
+        output = self.lord_engine.call(self.user_input)
+        # output = self.lord_engine.call_debug()
 
         # Update the moods
         self.mood_change += int(output['mood'])
