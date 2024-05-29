@@ -1,0 +1,12 @@
+{
+  "quest_0": {
+    "name": "Defusing the Royal Powder Keg",
+    "story": "After the coup, Calen has a new leader named General Rauffe. A man driven by money and power. After the break of war between Kingdom of Uria and The Gameshmian Empire, Calen slowly but surely began to favor the empire. If the tension keeps increasing, Calen will surely join the war on the empires side, leaving Kingdom of Uria to wage war on two fronts.",
+    "main_missions": ["Sign a non-agression pact",
+    "Pay a yearly tribute of 500 golds",
+    "Join our kingdom in war with Gemeshmian Empire"],
+    "main_missions_difficulties": [12, 16, 20],
+    "super_insult": "Your Baldness",
+    "insults": ["Smooth",  "Glowing", "Polished"]
+  }
+}

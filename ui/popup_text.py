@@ -5,11 +5,14 @@ import pygame
 
 class UIPopupText(UIElement):
     '''Popup Text UI element.'''
-    def __init__(self, text, fontsize, text_box_props, textcolor, backgroundcolor, margin, spacing):
+    def __init__(self, text, on, quit_button, advance_button, fontsize, text_box_props, textcolor, backgroundcolor, margin, spacing):
         super().__init__()
 
         # First render the text to an image, line by line
         self.text = text
+        self.on = on
+        self.has_quit_button = quit_button
+        self.has_advance_button = advance_button
         self.textcolor = textcolor
         self.backgroundcolor = backgroundcolor
         self.margin = margin
@@ -19,10 +22,33 @@ class UIPopupText(UIElement):
         self.text_box = pygame.Rect(*text_box_props)
         # Set up the bounding box
         self.bounding_box = pygame.Surface((self.text_box.width, self.text_box.height))
-        self.bounding_box.set_alpha(200)
-        self.bounding_box.fill(backgroundcolor)
+        self.bounding_box.set_alpha(backgroundcolor[3])
+        self.bounding_box.fill(backgroundcolor[:3])
 
-    def draw(self, screen, button=False, active=False, offset=0):
+        if self.has_quit_button:
+            self.quit_button = UIButton(text="x",
+                                 width=30,
+                                 height=35,
+                                 fontsize=25,
+                                 pos=(self.text_box.x + self.text_box.width - 40,
+                                      self.text_box.y ),
+                                 elevation=10,
+                                 color = (128, 128, 128, 128),
+                                 shadow=  (100, 100, 100, 128),
+                                 hover=  (200, 200, 200, 128))
+        if self.has_advance_button:
+            self.advance_button = UIButton(text="Okay",
+                                 width=100,
+                                 height=35,
+                                 fontsize=25,
+                                 pos=(self.text_box.x + self.text_box.width - 140,
+                                      self.text_box.y + self.text_box.height - 60),
+                                 elevation=10,
+                                 color = (255, 100, 100, 160),
+                                 shadow=  (255, 100, 100, 160),
+                                 hover=  (255, 50, 50, 160))
+
+    def draw(self, screen, active=False, offset=0):
         # Render the bbox
         screen.blit(self.bounding_box, self.text_box)
         if active:
@@ -55,17 +81,10 @@ class UIPopupText(UIElement):
             x = self.text_box.x +  20  + offset  # Reset the x.
             y += word_height  # Start on new row.
 
-        if button:
-            self.button = UIButton(text="x",
-                                 width=30,
-                                 height=35,
-                                 pos=(self.text_box.x + self.text_box.width - 40,
-                                      self.text_box.y ),
-                                 elevation=10,
-                                 color = (128, 128, 128, 128),
-                                 shadow=  (100, 100, 100, 128),
-                                 hover=  (200, 200, 200, 128))
-            self.button.draw_button(screen)
+        if self.has_quit_button:
+            self.quit_button.draw_button(screen)
+        if self.has_advance_button:
+            self.advance_button.draw_button(screen)
 
     def drawQuests(self, screen, quests, super_insults, insults, completed_quests, completed_super_insults, completed_insults):
         # Render the bbox

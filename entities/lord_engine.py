@@ -56,4 +56,4 @@ class LordEngine:
 
     def call_debug(self):
         mood=random.randint(-2,2)
-        return {'mood':mood, 'quest':None}
+        return {'mood':mood, 'quest':0}

@@ -16,80 +16,79 @@ class MainScreen(GameState):
         super().__init__(game)
 
         # Load the background image
-        self.background_image = pygame.image.load("assets/main.jpg")
+        self.background_image = pygame.image.load("assets/main.png")
         self.background_image = pygame.transform.scale(self.background_image, self.game.resolution)
         self.background_rect = self.background_image.get_rect()
 
-        self.start_button = UIButton(text="Start",
-                                   width=self.game.resolution[0] // 4,
-                                   height=self.game.resolution[1] // 10,
-                                   pos=((self.game.resolution[0] - (self.game.resolution[0] // 4)) // 2,
-                                        (self.game.resolution[1] - (self.game.resolution[1] // 10)) // 1.5),
+        self.logoImage = pygame.image.load("assets/logo.png").convert_alpha()
+        self.logoImage = pygame.transform.scale(self.logoImage, (670, 177))
+
+        self.start_button = UIButton(text="New Game",
+                                   width=400,
+                                   height=90,
+                                   pos=(600,540),
                                    elevation=10,
                                    color = (128, 128, 128, 128),
                                    shadow=  (100, 100, 100, 128),
                                    hover=  (200, 200, 200, 128))
 
-        self.instructions_button = UIButton(text="Instructions",
-                                   width=self.game.resolution[0] // 4,
-                                   height=self.game.resolution[1] // 10,
-                                   pos=((self.game.resolution[0] - (self.game.resolution[0] // 4)) // 2,
-                                        (self.game.resolution[1] - (self.game.resolution[1] // 10)) // 1.25),
+        self.load_button = UIButton(text="Load Game",
+                                   width=400,
+                                   height=90,
+                                   pos=(600, 648),
                                    elevation=10,
                                    color = (128, 128, 128, 128),
                                    shadow=  (100, 100, 100, 128),
                                    hover=  (200, 200, 200, 128))
 
         self.quit_button = UIButton(text="Quit",
-                                   width=self.game.resolution[0] // 4,
-                                   height=self.game.resolution[1] // 10,
-                                   pos=((self.game.resolution[0] - (self.game.resolution[0] // 4)) // 2,
-                                        (self.game.resolution[1] - (self.game.resolution[1] // 10)) // 1.07),
+                                   width=400,
+                                   height=90,
+                                   pos=(600, 756),
                                    elevation=10,
                                    color = (128, 128, 128, 128),
                                    shadow=  (100, 100, 100, 128),
                                    hover=  (200, 200, 200, 128))
 
-        self.instructions_props = (self.game.resolution[0]//10, self.game.resolution[1] // 5,
-                                8*self.game.resolution[0]//10, 6*self.game.resolution[1]//10)
-
-        self.instructions_popup = UIPopupText(text=LOREM,
-                                            fontsize=26,
-                                            text_box_props = self.instructions_props,
-                                            textcolor=(86, 54, 8),
-                                            backgroundcolor=(255, 228, 157),
-                                            margin=7,
-                                            spacing=1)
-        self.popup_on = False
-
+        self.load_popup = UIPopupText(text='Load Save File',
+                                        on=False,
+                                        quit_button=True,
+                                        advance_button=False,
+                                        fontsize=26,
+                                        text_box_props = (160, 180, 1280, 540),
+                                        textcolor=(86, 54, 8),
+                                        backgroundcolor=(255, 228, 157, 200),
+                                        margin=7,
+                                        spacing=1)
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif self.start_button.clicked:
-                self.game.change_state("live_play")
-            elif self.instructions_button.clicked:
-                self.popup_on = True
-                try:
-                    if self.instructions_popup.button.clicked:
-                        self.popup_on= False
-                        self.instructions_button.clicked= False
-                        self.instructions_popup.button.clicked= False
-                except AttributeError:
-                    print('not initialized yet')
+                self.game.change_state("map")
+            elif self.load_button.clicked:
+                self.load_popup.on = True
+                if self.load_popup.quit_button.clicked:
+                    self.load_popup.on= False
+                    self.load_button.clicked= False
+                    self.load_popup.quit_button.clicked= False
+
 
     def render(self):
         # Draw the background image
         self.game.screen.blit(self.background_image, self.background_rect)
 
-        if self.popup_on:
-            self.instructions_popup.draw(self.game.screen, True)
+        # Draw the game logo
+        self.game.screen.blit(self.logoImage, (50,50))
+
+        if self.load_popup.on:
+            self.load_popup.draw(self.game.screen)
 
         else:
             # Draw the buttons
             self.start_button.draw_button(self.game.screen)
-            self.instructions_button.draw_button(self.game.screen)
+            self.load_button.draw_button(self.game.screen)
             self.quit_button.draw_button(self.game.screen)
 
 

@@ -4,7 +4,7 @@ import pygame
 
 class UIButton(UIElement):
     '''Button UI element.'''
-    def __init__(self, text, width, height, pos, elevation, color, shadow, hover):
+    def __init__(self, text, width, height, pos, elevation, color, shadow, hover, fontsize=50):
         super().__init__()
 
         self.elevation = elevation
@@ -17,7 +17,7 @@ class UIButton(UIElement):
         self.top_color = color
         self.bottom_rect = pygame.Rect(pos,(width,height))
         self.bottom_color = shadow
-        font = pygame.font.SysFont('rockwell', 50)
+        font = pygame.font.SysFont('rockwell', fontsize)
         self.text_surf = font.render(text,True,'#FFFFFF')
         self.text_rect = self.text_surf.get_rect(center = self.top_rect.center)
 
