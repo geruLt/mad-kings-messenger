@@ -38,21 +38,25 @@ class LordEngine:
 
     def call(self, text):
         self.update_messages('user', text)
+        try:
+            chat_completion = self.client.chat.completions.create(
+                model=self.model,
+                messages=self.messages,
+                temperature=self.temperature
+            )
 
-        chat_completion = self.client.chat.completions.create(
-            model=self.model,
-            messages=self.messages,
-            temperature=self.temperature
-        )
+            output = chat_completion.choices[0].message.content
+            start_index = output.find("{")
+            end_index = output.rfind("}") + 1
+            output_fixed = output[start_index:end_index]
+            self.update_messages('assistant', output_fixed)
+            print(output_fixed)
+            return eval(output_fixed)
 
-        output = chat_completion.choices[0].message.content
-        start_index = output.find("{")
-        end_index = output.rfind("}") + 1
-        output_fixed = output[start_index:end_index]
+        except Exception:
+            output_fixed = self.call_debug()
+            return output_fixed
 
-        self.update_messages('assistant', output_fixed)
-        print(output_fixed)
-        return eval(output_fixed)
 
     def call_debug(self):
         mood=random.randint(-2,2)
